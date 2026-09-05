@@ -1,4 +1,4 @@
-const supabaseUrl = "https://hqbeyovlitndojowznmn.supabase.co/rest/v1/";
+const supabaseUrl = "https://hqbeyovlitndojowznmn.supabase.co";
 const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxYmV5b3ZsaXRuZG9qb3d6bm1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MzIzNjQsImV4cCI6MjEwNDIwODM2NH0.fx_-Owqh3WaAfXwVuy9hry2VLKXykAzCLsqPj1a4omU";
 const supabaseClient = window.supabase && !supabaseUrl.startsWith("VOTRE_")
     ? window.supabase.createClient(supabaseUrl, supabaseAnonKey)
