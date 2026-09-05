@@ -5,8 +5,8 @@ const hamburger = document.querySelector(".hamburger");
 const navigation = document.querySelector("#navigation-principale");
 const navigationLinks = document.querySelectorAll(".nav-links a");
 const whatsappNumber = "22655757299";
-const supabaseUrl = "VOTRE_URL_SUPABASE";
-const supabaseAnonKey = "VOTRE_CLE_ANON_SUPABASE";
+const supabaseUrl = "https://hqbeyovlitndojowznmn.supabase.co";
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxYmV5b3ZsaXRuZG9qb3d6bm1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MzIzNjQsImV4cCI6MjEwNDIwODM2NH0.fx_-Owqh3WaAfXwVuy9hry2VLKXykAzCLsqPj1a4omU";
 const supabaseClient = window.supabase && !supabaseUrl.startsWith("VOTRE_")
     ? window.supabase.createClient(supabaseUrl, supabaseAnonKey)
     : null;
@@ -97,7 +97,7 @@ buttons.forEach(button => {
 
         const category = button.dataset.category;
 
-        produits.forEach(produit => {
+        document.querySelectorAll("#boutique .produit").forEach(produit => {
             if (
                 category === "all" ||
                 produit.dataset.category === category
@@ -109,3 +109,40 @@ buttons.forEach(button => {
         });
     });
 });
+
+const publicProductsGrid = document.querySelector("#boutique .produits-categories");
+const renderPublicProduct = product => {
+    const article = document.createElement("article");
+    article.className = "produit seller-public-product";
+    article.dataset.category = product.category;
+    const badge = document.createElement("span");
+    badge.className = "badge badge-nouveau";
+    badge.textContent = "Vendeur";
+    const image = document.createElement("img");
+    image.src = product.image_url;
+    image.alt = product.name;
+    const name = document.createElement("h3");
+    name.textContent = product.name;
+    const details = document.createElement("div");
+    details.className = "details";
+    const description = document.createElement("p");
+    description.textContent = product.description;
+    const price = document.createElement("p");
+    price.className = "prix";
+    price.textContent = `${Number(product.price).toLocaleString("fr-FR")} FCFA`;
+    const actions = document.createElement("div");
+    actions.className = "bouton";
+    actions.innerHTML = '<button class="details" type="button">Details</button><button class="achat" type="button">Acheter</button>';
+    details.append(description, price, actions);
+    article.append(badge, image, name, details);
+    publicProductsGrid.append(article);
+};
+
+const loadPublicProducts = async () => {
+    if (!supabaseClient || !publicProductsGrid) return;
+    const { data, error } = await supabaseClient.from("products").select("id, name, category, price, description, image_url").eq("published", true).order("created_at", { ascending: false });
+    if (error) return;
+    data.forEach(renderPublicProduct);
+};
+
+loadPublicProducts();

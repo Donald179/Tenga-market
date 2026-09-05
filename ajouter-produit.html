@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ajouter un produit sur Tenga Market.">
+  <title>Ajouter un produit | Tenga Market</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="seller-page dashboard-page">
+  <header class="seller-header">
+    <a class="seller-brand" href="index.html"><strong>TENGA</strong> Market</a>
+    <div class="dashboard-actions"><a class="secondary-button" href="tableau-bord.html">Mes produits</a><button id="logout-button" class="secondary-button" type="button">Déconnexion</button></div>
+  </header>
+  <main class="dashboard-shell">
+    <div class="dashboard-heading"><div><span class="eyebrow">Espace vendeur</span><h1 id="product-form-title">Ajouter un produit</h1></div></div>
+    <section class="dashboard-panel product-editor-panel">
+      <p class="auth-intro">Ajoutez votre produit à la boutique Tenga Market.</p>
+      <form id="dashboard-product-form" class="auth-form">
+        <input name="id" type="hidden">
+        <div class="auth-grid">
+          <label class="auth-full">Nom du produit<input name="name" type="text" required></label>
+          <label>Catégorie<select name="category" required><option value="ordinateurs">Ordinateurs</option><option value="telephones">Téléphones</option><option value="accessoires">Accessoires</option><option value="services">Services</option></select></label>
+          <label>Prix (FCFA)<input name="price" type="number" min="0" step="1" required></label>
+          <label class="auth-full">Description<textarea name="description" rows="4" required></textarea></label>
+          <label class="auth-full">Photo du produit<input name="image_file" type="file" accept="image/jpeg,image/png,image/webp"><small class="file-help">JPG, PNG ou WebP, 5 Mo maximum. Obligatoire pour un nouveau produit.</small></label>
+        </div>
+        <div class="form-actions"><button id="product-submit" class="auth-button" type="submit">Publier le produit</button><a class="secondary-button" href="tableau-bord.html">Annuler</a></div>
+        <p id="dashboard-status" class="form-status" role="status"></p>
+      </form>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="seller-auth.js?v=7"></script>
+</body>
+</html>

@@ -15,29 +15,14 @@
   <main class="dashboard-shell">
     <div class="dashboard-heading">
       <div><span class="eyebrow">Tableau de bord</span><h1 id="store-title">Ma boutique</h1></div>
-      <a class="secondary-button" href="index.html#boutique">Voir la boutique</a>
+      <div class="dashboard-heading-actions"><a class="auth-button dashboard-add-button" href="ajouter-produit.html">Ajouter un produit</a><a class="secondary-button" href="index.html#boutique">Voir la boutique</a></div>
     </div>
-    <section class="dashboard-panel" aria-labelledby="product-form-title">
-      <h2 id="product-form-title">Ajouter un produit</h2>
-      <form id="dashboard-product-form" class="auth-form">
-        <input name="id" type="hidden">
-        <div class="auth-grid">
-          <label class="auth-full">Nom du produit<input name="name" type="text" required></label>
-          <label>Catégorie<select name="category" required><option value="ordinateurs">Ordinateurs</option><option value="telephones">Téléphones</option><option value="accessoires">Accessoires</option><option value="services">Services</option></select></label>
-          <label>Prix (FCFA)<input name="price" type="number" min="0" step="1" required></label>
-          <label class="auth-full">Description<textarea name="description" rows="3" required></textarea></label>
-          <label class="auth-full">Photo du produit<input name="image_file" type="file" accept="image/jpeg,image/png,image/webp"><small class="file-help">JPG, PNG ou WebP, 5 Mo maximum. Obligatoire pour un nouveau produit.</small></label>
-        </div>
-        <div class="form-actions"><button id="product-submit" class="auth-button" type="submit">Publier le produit</button><button id="cancel-edit" class="secondary-button" type="button" hidden>Annuler la modification</button></div>
-        <p id="dashboard-status" class="form-status" role="status"></p>
-      </form>
-    </section>
     <section class="dashboard-panel" aria-labelledby="products-title">
       <div class="panel-heading"><h2 id="products-title">Mes produits</h2><span id="product-count"></span></div>
       <div id="dashboard-products" class="dashboard-products"><p class="empty-state">Chargement de vos produits...</p></div>
     </section>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="seller-auth.js?v=4"></script>
+  <script src="seller-auth.js?v=7"></script>
 </body>
 </html>

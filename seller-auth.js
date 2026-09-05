@@ -1,7 +1,7 @@
 const supabaseUrl = "https://hqbeyovlitndojowznmn.supabase.co".replace(/\/+$/, "");
 const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxYmV5b3ZsaXRuZG9qb3d6bm1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MzIzNjQsImV4cCI6MjEwNDIwODM2NH0.fx_-Owqh3WaAfXwVuy9hry2VLKXykAzCLsqPj1a4omU";
 const supabaseClient = window.supabase && !supabaseUrl.startsWith("VOTRE_")
-    ? window.supabase.createClient(supabaseUrl, supabaseAnonKey)
+    ? window.supabase.createClient(supabaseUrl, supabaseAnonKey, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } })
     : null;
 
 const getFormValues = form => Object.fromEntries(new FormData(form).entries());
@@ -20,6 +20,11 @@ const requireSupabase = status => {
 const loginForm = document.querySelector("#login-form");
 if (loginForm) {
     const status = document.querySelector("#login-status");
+    if (supabaseClient && !new URLSearchParams(window.location.search).has("inscription")) {
+        supabaseClient.auth.getSession().then(({ data: { session } }) => {
+            if (session) window.location.href = "tableau-bord.html";
+        });
+    }
     loginForm.addEventListener("submit", async event => {
         event.preventDefault();
         if (!requireSupabase(status)) return;
@@ -56,8 +61,8 @@ if (signupForm) {
 }
 
 const dashboard = document.querySelector("#dashboard-products");
-if (dashboard) {
-    const productForm = document.querySelector("#dashboard-product-form");
+const productForm = document.querySelector("#dashboard-product-form");
+if (dashboard || productForm) {
     const status = document.querySelector("#dashboard-status");
     const productSubmit = document.querySelector("#product-submit");
     const cancelEdit = document.querySelector("#cancel-edit");
@@ -67,7 +72,7 @@ if (dashboard) {
         productForm.reset();
         productForm.elements.id.value = "";
         productSubmit.textContent = "Publier le produit";
-        cancelEdit.hidden = true;
+        if (cancelEdit) cancelEdit.hidden = true;
         document.querySelector("#product-form-title").textContent = "Ajouter un produit";
     };
 
@@ -108,6 +113,10 @@ if (dashboard) {
             actions.append(editButton, deleteButton);
             card.append(image, info, actions);
             editButton.addEventListener("click", () => {
+                if (!productForm) {
+                    window.location.href = `ajouter-produit.html?edit=${product.id}`;
+                    return;
+                }
                 Object.entries(product).forEach(([key, value]) => { if (productForm.elements[key]) productForm.elements[key].value = value; });
                 productSubmit.textContent = "Enregistrer les modifications";
                 cancelEdit.hidden = false;
@@ -144,11 +153,23 @@ if (dashboard) {
             if (result.error) { showStatus(status, result.error.message, true); return; }
             currentSeller = result.data;
         }
-        document.querySelector("#store-title").textContent = currentSeller.store_name;
-        loadProducts();
+        const storeTitle = document.querySelector("#store-title");
+        if (storeTitle) storeTitle.textContent = currentSeller.store_name;
+        if (dashboard) loadProducts();
+        const editId = new URLSearchParams(window.location.search).get("edit");
+        if (!dashboard && editId && productForm) {
+            const { data: product, error: productError } = await supabaseClient.from("products").select("*").eq("id", editId).eq("seller_id", currentSeller.id).single();
+            if (productError || !product) {
+                showStatus(status, "Produit introuvable.", true);
+                return;
+            }
+            Object.entries(product).forEach(([key, value]) => { if (productForm.elements[key]) productForm.elements[key].value = value; });
+            productSubmit.textContent = "Enregistrer les modifications";
+            document.querySelector("#product-form-title").textContent = "Modifier le produit";
+        }
     };
 
-    productForm.addEventListener("submit", async event => {
+    if (productForm) productForm.addEventListener("submit", async event => {
         event.preventDefault();
         const values = getFormValues(productForm);
         const id = values.id;
@@ -186,10 +207,17 @@ if (dashboard) {
         const { error } = await query;
         if (error) { showStatus(status, error.message, true); return; }
         resetProductForm();
-        showStatus(status, "Produit enregistré.");
-        loadProducts();
+        showStatus(status, "Produit enregistré. Redirection vers vos produits...");
+        if (dashboard) {
+            loadProducts();
+        } else {
+            window.setTimeout(() => { window.location.href = "tableau-bord.html"; }, 500);
+        }
     });
-    cancelEdit.addEventListener("click", resetProductForm);
-    document.querySelector("#logout-button").addEventListener("click", async () => { await supabaseClient.auth.signOut(); window.location.href = "vendeur.html"; });
+    if (cancelEdit) cancelEdit.addEventListener("click", resetProductForm);
+    document.querySelector("#logout-button").addEventListener("click", async () => {
+        await supabaseClient.auth.signOut();
+        window.location.href = "index.html";
+    });
     loadDashboard();
 }
