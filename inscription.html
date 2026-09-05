@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Inscription vendeur Tenga Market. Creez votre boutique et publiez vos produits.">
+  <title>Inscription vendeur | Tenga Market</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="seller-page">
+  <main class="seller-shell">
+    <a class="seller-brand" href="index.html"><strong>TENGA</strong> Market</a>
+    <section class="auth-card auth-card-wide" aria-labelledby="signup-title">
+      <span class="eyebrow">Devenir vendeur</span>
+      <h1 id="signup-title">Créez votre compte vendeur</h1>
+      <p class="auth-intro">Votre boutique sera visible sur Tenga Market après la publication de vos produits.</p>
+      <form id="signup-form" class="auth-form">
+        <div class="auth-grid">
+          <label>Nom<input name="last_name" type="text" autocomplete="family-name" required></label>
+          <label>Prénom<input name="first_name" type="text" autocomplete="given-name" required></label>
+          <label>Adresse e-mail<input name="email" type="email" autocomplete="email" required></label>
+          <label>Mot de passe<input name="password" type="password" autocomplete="new-password" minlength="6" required></label>
+          <label>Contact WhatsApp<input name="whatsapp" type="tel" autocomplete="tel" placeholder="+226 70 00 00 00" required></label>
+          <label>Nom de la boutique<input name="store_name" type="text" autocomplete="organization" required></label>
+          <label class="auth-full">Adresse ou ville<input name="address" type="text" autocomplete="street-address" required></label>
+        </div>
+        <button class="auth-button" type="submit">Créer mon compte</button>
+        <p id="signup-status" class="form-status" role="status"></p>
+      </form>
+      <p class="auth-footer">Vous avez déjà un compte ? <a href="vendeur.html">Se connecter</a></p>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="seller-auth.js"></script>
+</body>
+</html>

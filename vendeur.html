@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Connexion a l'espace vendeur Tenga Market pour gerer votre boutique et vos produits.">
+  <title>Connexion vendeur | Tenga Market</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="seller-page">
+  <main class="seller-shell">
+    <a class="seller-brand" href="index.html"><strong>TENGA</strong> Market</a>
+    <section class="auth-card" aria-labelledby="login-title">
+      <span class="eyebrow">Espace vendeur</span>
+      <h1 id="login-title">Bienvenue dans votre boutique</h1>
+      <p class="auth-intro">Connectez-vous pour ajouter, modifier et gerer vos produits.</p>
+      <form id="login-form" class="auth-form">
+        <label>Adresse e-mail<input name="email" type="email" autocomplete="email" required></label>
+        <label>Mot de passe<input name="password" type="password" autocomplete="current-password" minlength="6" required></label>
+        <button class="auth-button" type="submit">Se connecter</button>
+        <p id="login-status" class="form-status" role="status"></p>
+      </form>
+      <p class="auth-footer">Vous n'avez pas encore de compte ? <a href="inscription.html">Créer un compte vendeur</a></p>
+      <a class="back-link" href="index.html">Retour à la boutique</a>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="seller-auth.js"></script>
+</body>
+</html>

@@ -5,6 +5,12 @@ const hamburger = document.querySelector(".hamburger");
 const navigation = document.querySelector("#navigation-principale");
 const navigationLinks = document.querySelectorAll(".nav-links a");
 const whatsappNumber = "22655757299";
+const supabaseUrl = "VOTRE_URL_SUPABASE";
+const supabaseAnonKey = "VOTRE_CLE_ANON_SUPABASE";
+const supabaseClient = window.supabase && !supabaseUrl.startsWith("VOTRE_")
+    ? window.supabase.createClient(supabaseUrl, supabaseAnonKey)
+    : null;
+let sellerId = null;
 
 const getProductName = product => product.querySelector("h3").textContent.trim();
 
