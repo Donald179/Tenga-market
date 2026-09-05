@@ -67,6 +67,7 @@ if (dashboard || productForm) {
     const productSubmit = document.querySelector("#product-submit");
     const cancelEdit = document.querySelector("#cancel-edit");
     let currentSeller = null;
+    if (productSubmit) productSubmit.disabled = true;
 
     const resetProductForm = () => {
         productForm.reset();
@@ -143,7 +144,8 @@ if (dashboard || productForm) {
         if (!requireSupabase(status)) return;
         const { data: { user } } = await supabaseClient.auth.getUser();
         if (!user) { window.location.href = "vendeur.html"; return; }
-        document.querySelector("#seller-email").textContent = user.email;
+        const sellerEmail = document.querySelector("#seller-email");
+        if (sellerEmail) sellerEmail.textContent = user.email;
         const profile = user.user_metadata || {};
         const { data, error } = await supabaseClient.from("sellers").select("*").eq("user_id", user.id).maybeSingle();
         if (error) { showStatus(status, error.message, true); return; }
@@ -155,6 +157,7 @@ if (dashboard || productForm) {
         }
         const storeTitle = document.querySelector("#store-title");
         if (storeTitle) storeTitle.textContent = currentSeller.store_name;
+        if (productSubmit) productSubmit.disabled = false;
         if (dashboard) loadProducts();
         const editId = new URLSearchParams(window.location.search).get("edit");
         if (!dashboard && editId && productForm) {
@@ -177,6 +180,10 @@ if (dashboard || productForm) {
         delete values.id;
         delete values.image_file;
         values.price = Number(values.price);
+        if (!currentSeller) {
+            showStatus(status, "Votre profil vendeur est encore en cours de chargement. Réessayez dans un instant.", true);
+            return;
+        }
         values.seller_id = currentSeller.id;
 
         if (!id && !(imageFile instanceof File)) {
