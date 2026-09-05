@@ -1121,6 +1121,8 @@ footer .autor {
 .seller-page .auth-form select,
 .seller-page .auth-form textarea { width: 100%; min-height: 48px; margin: 0; padding: 12px 14px; border: 1px solid #dfe3ea; border-radius: 9px; background: #fbfcfe; color: var(--color-secondary); font: inherit; font-size: 14px; outline: none; transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease; }
 .seller-page .auth-form textarea { min-height: 105px; resize: vertical; }
+.seller-page .auth-form input[type="file"] { min-height: auto; padding: 10px; cursor: pointer; }
+.seller-page .file-help { display: block; margin-top: -10px; color: var(--color-text-light); font-size: 12px; font-weight: 400; }
 .seller-page .auth-form input:focus,
 .seller-page .auth-form select:focus,
 .seller-page .auth-form textarea:focus { border-color: var(--color-primary); background: var(--color-white); box-shadow: 0 0 0 4px rgba(255, 106, 0, .12); }

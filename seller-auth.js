@@ -5,6 +5,7 @@ const supabaseClient = window.supabase && !supabaseUrl.startsWith("VOTRE_")
     : null;
 
 const getFormValues = form => Object.fromEntries(new FormData(form).entries());
+const maxImageSize = 5 * 1024 * 1024;
 const showStatus = (element, message, isError = false) => {
     element.textContent = message;
     element.classList.toggle("is-error", isError);
@@ -151,10 +152,36 @@ if (dashboard) {
         event.preventDefault();
         const values = getFormValues(productForm);
         const id = values.id;
+        const imageFile = values.image_file;
         delete values.id;
+        delete values.image_file;
         values.price = Number(values.price);
         values.seller_id = currentSeller.id;
+
+        if (!id && !(imageFile instanceof File)) {
+            showStatus(status, "Sélectionnez une photo pour le produit.", true);
+            return;
+        }
+        if (imageFile instanceof File && (!imageFile.type.startsWith("image/") || imageFile.size > maxImageSize)) {
+            showStatus(status, "La photo doit être JPG, PNG ou WebP et faire 5 Mo maximum.", true);
+            return;
+        }
+
         showStatus(status, id ? "Mise à jour..." : "Publication...");
+        if (imageFile instanceof File) {
+            const fileExtension = imageFile.name.split(".").pop().toLowerCase();
+            const filePath = `${currentSeller.id}/${crypto.randomUUID()}.${fileExtension}`;
+            const { error: uploadError } = await supabaseClient.storage.from("product-images").upload(filePath, imageFile, {
+                cacheControl: "3600",
+                upsert: false,
+                contentType: imageFile.type
+            });
+            if (uploadError) {
+                showStatus(status, `Impossible d'envoyer la photo : ${uploadError.message}`, true);
+                return;
+            }
+            values.image_url = supabaseClient.storage.from("product-images").getPublicUrl(filePath).data.publicUrl;
+        }
         const query = id ? supabaseClient.from("products").update(values).eq("id", id).eq("seller_id", currentSeller.id) : supabaseClient.from("products").insert(values);
         const { error } = await query;
         if (error) { showStatus(status, error.message, true); return; }
