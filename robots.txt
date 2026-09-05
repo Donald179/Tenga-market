@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://donald179.github.io/Tenga-market/sitemap.xml
