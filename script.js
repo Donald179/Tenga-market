@@ -21,6 +21,43 @@ const buyProduct = product => {
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
 };
 
+const contactForm = document.querySelector("#contact-form");
+if (contactForm) {
+    const contactStatus = document.querySelector("#contact-status");
+    contactForm.addEventListener("submit", async event => {
+        event.preventDefault();
+        const name = document.querySelector("#nom").value.trim();
+        const phone = document.querySelector("#numero").value.trim();
+        const email = document.querySelector("#email").value.trim();
+        const message = document.querySelector("#message").value.trim();
+        const submitButton = contactForm.querySelector("input[type=submit]");
+        submitButton.disabled = true;
+        contactStatus.textContent = "Envoi du message...";
+        contactStatus.classList.remove("is-error");
+
+        try {
+            const response = await fetch(`${supabaseUrl}/functions/v1/send-contact-email`, {
+                method: "POST",
+                headers: {
+                    apikey: supabaseAnonKey,
+                    Authorization: `Bearer ${supabaseAnonKey}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ name, phone, email, message })
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || "Le message n'a pas pu être envoyé.");
+            contactForm.reset();
+            contactStatus.textContent = "Message envoyé avec succès.";
+        } catch (error) {
+            contactStatus.textContent = error.message;
+            contactStatus.classList.add("is-error");
+        } finally {
+            submitButton.disabled = false;
+        }
+    });
+}
+
 const showProductDetails = product => {
     if (product.classList.contains("is-flipped")) {
         return;

@@ -385,7 +385,12 @@
 
   <section id="contact">
     <div class="contact-form">
-      <form action="">
+      <form id="contact-form">
+        <div class="contact-form-heading">
+          <span class="contact-eyebrow">Nous contacter</span>
+          <h2>Parlons de votre projet</h2>
+          <p>Votre message sera envoyé directement par e-mail.</p>
+        </div>
         <div class="information">
           <div class="nom">
             <label for="nom">Nom &amp; Prenom</label>
@@ -394,7 +399,7 @@
           <div class="message">
             <div class="whatsapp">
               <label for="numero">WhatsApp</label>
-              <input id="numero" type="number" placeholder="Votre numero WhatsApp" required>
+              <input id="numero" type="tel" placeholder="Votre numero WhatsApp" required>
             </div>
             <div class="email">
               <label for="email">Adresse mail</label>
@@ -404,7 +409,8 @@
         </div>
         <div class="contenu">
           <textarea name="message" id="message" placeholder="Votre message" required></textarea>
-          <input type="submit" value="Envoyer">
+          <input type="submit" value="Envoyer le message">
+          <p id="contact-status" class="contact-status" role="status" aria-live="polite"></p>
         </div>
       </form>
     </div>

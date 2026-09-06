@@ -733,6 +733,122 @@ textarea:focus {
   transform: scale(1.03);
 }
 
+#contact .contact-form {
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+#contact .contact-form form {
+  gap: 26px;
+  padding: clamp(24px, 4vw, 42px);
+}
+
+#contact .contact-form-heading {
+  padding-bottom: 4px;
+}
+
+#contact .contact-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+#contact .contact-form-heading h2 {
+  margin-bottom: 8px;
+  color: var(--color-secondary);
+  font-size: clamp(24px, 3vw, 32px);
+  line-height: 1.15;
+}
+
+#contact .contact-form-heading p {
+  color: var(--color-text-light);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+#contact .contact-form .information {
+  gap: 8px;
+}
+
+#contact .contact-form .nom,
+#contact .contact-form .message {
+  flex: none;
+}
+
+#contact .contact-form .contenu {
+  gap: 16px;
+}
+
+#contact .contact-form .message {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+#contact .contact-form label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--color-secondary);
+  font-size: 12px;
+  letter-spacing: .2px;
+}
+
+#contact .contact-form input[type="text"],
+#contact .contact-form input[type="email"],
+#contact .contact-form input[type="tel"],
+#contact .contact-form textarea {
+  min-height: 48px;
+  padding: 13px 14px;
+  border: 1px solid #dfe3ea;
+  border-radius: 9px;
+  background: #fbfcfe;
+  color: var(--color-secondary);
+}
+
+#contact .contact-form textarea {
+  min-height: 135px;
+}
+
+#contact .contact-form input[type="text"]:focus,
+#contact .contact-form input[type="email"]:focus,
+#contact .contact-form input[type="tel"]:focus,
+#contact .contact-form textarea:focus {
+  border-color: var(--color-primary);
+  background: var(--color-white);
+  box-shadow: 0 0 0 4px rgba(255, 106, 0, .12);
+}
+
+#contact .contact-form .contenu input[type="submit"] {
+  width: 100%;
+  align-self: stretch;
+  padding: 14px 20px;
+  border-radius: 9px;
+  font-size: 14px;
+  text-align: center;
+}
+
+#contact .contact-status {
+  min-height: 20px;
+  margin: 0;
+  color: #16803c;
+  font-size: 13px;
+  text-align: center;
+}
+
+#contact .contact-status.is-error {
+  color: #b42318;
+}
+
+#contact .contact-form .contenu input[type="submit"]:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+
 .informations {
   min-width: 0;
   display: flex;
@@ -1074,6 +1190,16 @@ footer .autor {
     width: 100%;
   }
 
+}
+
+@media (max-width: 640px) {
+  #contact .contact-form .message {
+    grid-template-columns: 1fr;
+  }
+
+  #contact .contact-form form {
+    padding: 24px 18px;
+  }
 }
 
 /* ===================== VENDEUR - SURCHARGE FINALE ===================== */
