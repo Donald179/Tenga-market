@@ -7,6 +7,7 @@ const supabaseClient = window.supabase && !supabaseUrl.startsWith("VOTRE_")
 const getFormValues = form => Object.fromEntries(new FormData(form).entries());
 const maxImageSize = 5 * 1024 * 1024;
 const showStatus = (element, message, isError = false) => {
+    if (!element) return;
     element.textContent = message;
     element.classList.toggle("is-error", isError);
 };
@@ -62,8 +63,11 @@ if (signupForm) {
 
 const dashboard = document.querySelector("#dashboard-products");
 const productForm = document.querySelector("#dashboard-product-form");
-if (dashboard || productForm) {
-    const status = document.querySelector("#dashboard-status");
+const profileForm = document.querySelector("#seller-profile-form");
+    const profileImagePreview = document.querySelector("#profile-image-preview");
+    const profileImageInput = document.querySelector("#seller-image-input");
+if (dashboard || productForm || profileForm) {
+    const status = document.querySelector("#dashboard-status") || document.querySelector("#profile-status");
     const productSubmit = document.querySelector("#product-submit");
     const cancelEdit = document.querySelector("#cancel-edit");
     let currentSeller = null;
@@ -158,6 +162,12 @@ if (dashboard || productForm) {
         const storeTitle = document.querySelector("#store-title");
         if (storeTitle) storeTitle.textContent = currentSeller.store_name;
         if (productSubmit) productSubmit.disabled = false;
+        if (profileForm) {
+            ["first_name", "last_name", "store_name", "whatsapp", "address", "description"].forEach(field => {
+                if (profileForm.elements[field]) profileForm.elements[field].value = currentSeller[field] || "";
+            });
+            if (profileImagePreview && currentSeller.image_url) profileImagePreview.src = currentSeller.image_url;
+        }
         if (dashboard) loadProducts();
         const editId = new URLSearchParams(window.location.search).get("edit");
         if (!dashboard && editId && productForm) {
@@ -222,6 +232,36 @@ if (dashboard || productForm) {
         }
     });
     if (cancelEdit) cancelEdit.addEventListener("click", resetProductForm);
+    if (profileForm) profileForm.addEventListener("submit", async event => {
+        event.preventDefault();
+        const values = getFormValues(profileForm);
+        const imageFile = values.seller_image;
+        delete values.seller_image;
+        if (imageFile instanceof File && (!imageFile.type.startsWith("image/") || imageFile.size > maxImageSize)) {
+            showStatus(status, "La photo de profil doit être JPG, PNG ou WebP et faire 5 Mo maximum.", true);
+            return;
+        }
+        showStatus(status, "Enregistrement du profil...");
+        if (imageFile instanceof File) {
+            const extension = imageFile.name.split(".").pop().toLowerCase();
+            const path = `${currentSeller.id}/${crypto.randomUUID()}.${extension}`;
+            const { error: uploadError } = await supabaseClient.storage.from("seller-images").upload(path, imageFile, { upsert: false, contentType: imageFile.type });
+            if (uploadError) { showStatus(status, `Impossible d'envoyer la photo de profil : ${uploadError.message}`, true); return; }
+            values.image_url = supabaseClient.storage.from("seller-images").getPublicUrl(path).data.publicUrl;
+        }
+        const { data, error } = await supabaseClient.from("sellers").update(values).eq("id", currentSeller.id).select().single();
+        if (error) { showStatus(status, error.message, true); return; }
+        currentSeller = data;
+        const storeTitle = document.querySelector("#store-title");
+        if (storeTitle) storeTitle.textContent = data.store_name;
+        showStatus(status, "Profil mis à jour.");
+        profileForm.elements.seller_image.value = "";
+        if (profileImagePreview && data.image_url) profileImagePreview.src = data.image_url;
+    });
+    if (profileImageInput && profileImagePreview) profileImageInput.addEventListener("change", () => {
+        const [file] = profileImageInput.files;
+        if (file) profileImagePreview.src = URL.createObjectURL(file);
+    });
     document.querySelector("#logout-button").addEventListener("click", async () => {
         await supabaseClient.auth.signOut();
         window.location.href = "index.html";

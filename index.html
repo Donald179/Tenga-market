@@ -61,11 +61,28 @@
         <li><a href="index.html">Accueil</a></li>
         <li><a href="#boutique">Boutique</a></li>
         <li><a href="vendeur.html">Vendre</a></li>
+        <li id="dashboard-nav-item" hidden><a href="tableau-bord.html">Tableau de bord</a></li>
         <li><a href="#apropos">A-propos</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
+    <button id="cart-toggle" class="cart-toggle" type="button" aria-label="Ouvrir le panier" aria-expanded="false">
+      <span id="cart-label">Panier</span> <span id="cart-count">0</span>
+    </button>
   </header>
+
+  <aside id="cart-panel" class="cart-panel" aria-label="Panier d'achat" aria-hidden="true">
+    <div class="cart-header">
+      <div><span class="eyebrow">Votre sélection</span><h2>Panier</h2></div>
+      <button id="cart-close" class="cart-close" type="button" aria-label="Fermer le panier">&times;</button>
+    </div>
+    <div id="cart-items" class="cart-items"><p class="cart-empty">Votre panier est vide.</p></div>
+    <div class="cart-footer">
+      <div class="cart-total"><span>Total</span><strong id="cart-total">0 FCFA</strong></div>
+      <button id="cart-whatsapp" class="cart-whatsapp" type="button" disabled>Envoyer la commande sur WhatsApp</button>
+    </div>
+  </aside>
+  <div id="cart-overlay" class="cart-overlay" hidden></div>
 
   <section id="hero">
     <div class="hero">
@@ -99,7 +116,7 @@
           <p>Core i5, 8 Go RAM et SSD 256 Go pour le travail et les etudes.</p>
           <p class="prix">175.000 FCFA</p>
           <div class="bouton">
-            <button class="details">Details</button>
+            <button class="details">Détails</button>
             <button class="achat">Acheter</button>
           </div>
         </div>
@@ -458,6 +475,6 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=3"></script>
+  <script src="script.js?v=8"></script>
 </body>
 </html>

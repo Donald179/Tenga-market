@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Modifier le profil vendeur Teng Market.">
+  <title>Mon profil vendeur | Teng Market</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0EH2T8N808"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0EH2T8N808');
+  </script>
+</head>
+<body class="seller-page dashboard-page">
+  <header class="seller-header">
+    <a class="seller-brand" href="index.html"><strong>TENG</strong> Market</a>
+    <div class="dashboard-actions"><a class="secondary-button" href="tableau-bord.html">Mes produits</a><button id="logout-button" class="secondary-button" type="button">Déconnexion</button></div>
+  </header>
+  <main class="dashboard-shell">
+    <div class="dashboard-heading"><div><span class="eyebrow">Espace vendeur</span><h1>Mon profil vendeur</h1></div></div>
+    <section class="dashboard-panel profile-panel" aria-labelledby="profile-title">
+      <div class="panel-heading"><div><span class="eyebrow">Ma boutique</span><h2 id="profile-title">Modifier mon profil</h2></div><span id="profile-status" class="form-status" role="status"></span></div>
+      <form id="seller-profile-form" class="auth-form">
+        <div class="profile-image-field">
+          <span class="profile-image-label">Photo de profil</span>
+          <div class="profile-avatar-wrap">
+            <img id="profile-image-preview" class="profile-avatar" src="images/hero.jpg" alt="Aperçu de la photo de profil">
+            <label class="profile-camera" for="seller-image-input" aria-label="Changer la photo de profil" title="Changer la photo de profil"><span class="camera-icon" aria-hidden="true"></span></label>
+            <input id="seller-image-input" name="seller_image" type="file" accept="image/jpeg,image/png,image/webp">
+          </div>
+          <small class="file-help">Photo de profil JPG, PNG ou WebP, 5 Mo maximum.</small>
+        </div>
+        <div class="auth-grid">
+          <label>Nom du vendeur<input name="last_name" type="text" required></label>
+          <label>Prénom<input name="first_name" type="text" required></label>
+          <label>Nom de la boutique<input name="store_name" type="text" required></label>
+          <label>WhatsApp<input name="whatsapp" type="tel" required></label>
+          <label class="auth-full">Localisation<input name="address" type="text" required></label>
+          <label class="auth-full">Description de la boutique<textarea name="description" rows="4" placeholder="Présentez votre boutique..."></textarea></label>
+        </div>
+        <div class="form-actions"><button class="auth-button" type="submit">Enregistrer le profil</button><a class="secondary-button" href="tableau-bord.html">Annuler</a></div>
+      </form>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="seller-auth.js?v=10"></script>
+</body>
+</html>
