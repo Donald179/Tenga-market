@@ -45,7 +45,13 @@ if (contactForm) {
                 },
                 body: JSON.stringify({ name, phone, email, message })
             });
-            const result = await response.json();
+            const responseText = await response.text();
+            let result = {};
+            try {
+                result = responseText ? JSON.parse(responseText) : {};
+            } catch {
+                throw new Error("La fonction Supabase a renvoyé une réponse invalide.");
+            }
             if (!response.ok) throw new Error(result.error || "Le message n'a pas pu être envoyé.");
             contactForm.reset();
             contactStatus.textContent = "Message envoyé avec succès.";
